@@ -5,7 +5,8 @@
 (deftest create-profile-success-test
   (is (= {:id 1
           :name "Edward"
-          :connections []}
+          :connections []
+          :hidden false}
          (profile/create 1 "Edward"))
       "create-profile returns map expected"))
 
@@ -20,4 +21,5 @@
 (deftest profile-get-fields-test
   (let [a-profile (profile/create 1 "Edward")]
     (is (= 1        (profile/get-id a-profile)))
-    (is (= "Edward" (profile/get-name a-profile)))))
+    (is (= "Edward" (profile/get-name a-profile)))
+    (is (= false     (profile/hidden? a-profile)))))
