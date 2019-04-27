@@ -6,9 +6,10 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [ring "1.6.3"]
                  [ring/ring-mock "0.3.2"]
-                 [compojure "1.6.1"]]
+                 [compojure "1.6.1" :exclusions [ring/ring-codec]]]
 
   :main nukr.core
   :profiles {:dev
              {:main nukr.core/-dev-main}}
-  :plugins [[lein-eftest "0.5.7"]])
+  :plugins [[lein-eftest "0.5.7"]]
+  :repl-options {:init-ns nukr.profile})
