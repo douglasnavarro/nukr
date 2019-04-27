@@ -1,10 +1,12 @@
 (ns nukr.profile)
 
-(defn create-profile [id name]
-  (assert (integer? id))
-  (assert (string? name))
-  {:id id :name name})
+(defn create [id name]
+  (assert (integer? id)
+          "id must be integer!")
+  (assert (string? name)
+          "name must be string!")
+  {:id id :name name :connections []})
 
-(defn profile-id [profile] (:id profile))
+(defn get-id [profile] (:id profile))
 
-(defn profile-name [profile] (:name profile))
+(defn get-name [profile] (:name profile))
