@@ -2,18 +2,11 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer [defroutes GET POST]]
-            [compojure.route :refer [not-found]]))
-
-(defn home [req]
-  {:status 200
-   :body "Welcome to Nukr!"
-   :headers {"content-type" "text/plain"}})
-
-(defn create-profile [req])
+            [compojure.route :refer [not-found]]
+            [nukr.handlers :refer :all]))
 
 (defroutes app
   (GET "/" [] home)
-  (POST "/profiles/create" [] create-profile)
   (not-found "Page not found."))
 
 (defn -main [port]
