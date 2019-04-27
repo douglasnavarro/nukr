@@ -10,5 +10,6 @@
             :headers {"content-type" "text/plain"}}
            (app (mock/request :get "/")))
         " returns 200 and greeting message on GET")
-    (is (= 404 (:status (app (mock/request :post "/"))))
+    (is (= 404
+           (:status (app (mock/request :post "/"))))
         " returns 404 on POST")))
