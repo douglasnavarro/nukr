@@ -1,5 +1,5 @@
 (ns nukr.handlers
- "Request handler functions.")
+  "Request handler functions.")
 
 (defn home [req]
   {:status 200
