@@ -1,6 +1,6 @@
 (ns nukr.profile-test
   (:require [clojure.test :refer :all]
-            [nukr.profile :as profile]))
+            [nukr.profile-logic :as profile]))
 
 (deftest create-profile-success-test
   (is (= {:id 1

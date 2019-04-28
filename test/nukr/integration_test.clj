@@ -13,3 +13,8 @@
     (is (= 404
            (:status (app (mock/request :post "/"))))
         " returns 404 on POST")))
+
+(deftest profiles-endpoint-test
+  (let [response (app (mock/request :get "/profiles"))]
+    (is (= 200 (:status response)))
+    (is (includes? (:body response) "Cris"))))

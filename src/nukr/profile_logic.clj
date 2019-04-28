@@ -1,4 +1,4 @@
-(ns nukr.profile
+(ns nukr.profile-logic
   "Pure functions for dealing with profiles logic")
 
 (defn create
@@ -18,7 +18,7 @@
 (defn hidden? [profile] (:hidden profile))
 
 (defn add-connection
-  "Return new profile with connection added"
+  "Return new `profile` with `id` added to its connections "
   [profile id]
   (let [connections (get-connections profile)]
     (->> id
