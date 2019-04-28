@@ -38,7 +38,7 @@
            [:div.row {:id "profiles-list"}
             (if (seq profiles)
               (for [profile profiles]
-                [:div {:class "col l3 m5 s12"}
+                [:div {:class "col l3 m4 s12"}
                  (create-card profile)])
               [:div.col
                [:p "No profiles. Lead the way!"]])]
