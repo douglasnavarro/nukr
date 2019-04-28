@@ -14,37 +14,33 @@
 
 (def app-state (model-state/create-profile-storage!))
 
-(defn home [req]
-  {:status 200
-   :body (profile-view/profiles-page @app-state)
-   :headers {}})
+(defn handle-redirect-profiles [req]
+  {:status 302
+   :headers {"Location" "/profiles"}})
 
-(defn list-profiles [req]
+(defn handle-list-profiles [req]
   (let [profiles @app-state]
     {:status 200
      :headers {}
      :body (str "<html><head></head><body><div>"
                 profiles
                 "</div><form method=\"POST\" action=\"/profiles\">"
-                "<input type=\"text\" name=\"id\" placeholder=\"id\">"
                 "<input type=\"text\" name=\"name\" placeholder=\"name\">"
                 "<input type=\"submit\">"
                 "</body></html>")}))
 
-(defn create-profile [req]
-  (let [id      (Integer. (get-in req [:params "id"]))
-        name    (get-in req [:params "name"])
-        profile (model-logic/create id name)
-        item    (model-state/add-profile profile app-state)])
+(defn handle-create-profile [req]
+  (let [name    (get-in req [:params "name"])
+        item    (model-state/add-profile! name app-state)])
   {:status 302
    :headers {"Location" "/profiles"}
    :body ""})
 
 (defroutes routes
   (ANY "/request" [] handle-dump)
-  (GET  "/" [] home)
-  (GET  "/profiles" [] list-profiles)
-  (POST "/profiles" [] create-profile)
+  (GET  "/" [] handle-redirect-profiles)
+  (GET  "/profiles" [] handle-list-profiles)
+  (POST "/profiles" [] handle-create-profile)
   (not-found "Page not found."))
 
 (def app

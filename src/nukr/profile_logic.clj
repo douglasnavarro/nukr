@@ -2,14 +2,10 @@
   "Pure functions for dealing with profiles logic")
 
 (defn create
-  [id name]
-  (assert (integer? id)
-          "id must be integer!")
+  [name]
   (assert (string? name)
           "name must be string!")
-  {:id id :name name :connections #{} :hidden false})
-
-(defn get-id [profile] (:id profile))
+  {:name name :connections #{} :hidden false})
 
 (defn get-name [profile] (:name profile))
 
@@ -18,15 +14,15 @@
 (defn hidden? [profile] (:hidden profile))
 
 (defn add-connection
-  "Return new `profile` with `id` added to its connections "
-  [profile id]
+  "Return new `profile` with `name` added to its connections "
+  [profile name]
   (let [connections (get-connections profile)]
-    (->> id
+    (->> name
          (conj connections)
          (assoc profile :connections))))
 
 (defn connect
   "Return vector of 2 profiles with connections updated"
   [profile1 profile2]
-  [(add-connection profile1 (get-id profile2))
-   (add-connection profile2 (get-id profile1))])
+  [(add-connection profile1 (get-name profile2))
+   (add-connection profile2 (get-name profile1))])
