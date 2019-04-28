@@ -3,7 +3,7 @@
   (require [hiccup.page :refer [html5]]))
 
 (defn- create-profile-form []
-  (html5 [:form {:method "POST" :action "/request"}
+  (html5 [:form {:method "POST" :action "/profiles"}
           [:input {:type "text" :name "name"
                    :placeholder "How should we call you? :)"}]
           [:p
@@ -28,8 +28,8 @@
               [:h5 "The future is purple - and connected!"]
               [:hr]]]
            [:div.row {:id "profiles-list"}
-            [:p (str profiles)]]
+            [:p profiles]]
            [:div.row {:id "create-profile"}
-            [:div {:class "col s6 push-s4 center-align"}
+            [:div {:class "col s4 push-s4 center-align"}
              (create-profile-form)]]]
           [:script {:src "/materialize/js/materialize.min.js"}]]))
