@@ -1,5 +1,5 @@
 (ns nukr.profile-logic
-  "Pure functions for dealing with profiles logic")
+  "Pure functions for dealing with model/profiles logic")
 
 (defn create
   [name]

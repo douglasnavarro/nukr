@@ -22,12 +22,7 @@
   (let [profiles @app-state]
     {:status 200
      :headers {}
-     :body (str "<html><head></head><body><div>"
-                profiles
-                "</div><form method=\"POST\" action=\"/profiles\">"
-                "<input type=\"text\" name=\"name\" placeholder=\"name\">"
-                "<input type=\"submit\">"
-                "</body></html>")}))
+     :body (profile-view/profiles-page profiles)}))
 
 (defn handle-create-profile [req]
   (let [name    (get-in req [:params "name"])
