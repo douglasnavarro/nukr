@@ -9,27 +9,14 @@
             [compojure.route :refer [not-found]])
 
   (:require [nukr.profile-model :as model-state]
-            [nukr.profile-logic :as model-logic]
-            [nukr.profile-view :as profile-view]))
+            [nukr.handler :refer :all]))
 
 (def app-state (model-state/create-profile-storage!))
 
-(defn handle-redirect-profiles [req]
-  {:status 302
-   :headers {"Location" "/profiles"}})
-
-(defn handle-list-profiles [req]
-  (let [profiles @app-state]
-    {:status 200
-     :headers {}
-     :body (profile-view/profiles-page profiles)}))
-
-(defn handle-create-profile [req]
-  (let [name    (get-in req [:params "name"])
-        item    (model-state/add-profile! name app-state)])
-  {:status 302
-   :headers {"Location" "/profiles"}
-   :body ""})
+(defn wrap-state [handler]
+  "Middleware to pass state to handlers along with the request."
+  (fn [req]
+    (handler (assoc req :app-state app-state))))
 
 (defroutes routes
   (ANY "/request" [] handle-dump)
@@ -39,11 +26,12 @@
   (not-found "Page not found."))
 
 (def app
-  (wrap-file-info
-     (wrap-resource
-       (wrap-params
-         routes)
-       "static")))
+  (wrap-state
+    (wrap-file-info
+       (wrap-resource
+         (wrap-params
+           routes)
+         "static"))))
 
 (defn -main [port]
   (jetty/run-jetty
