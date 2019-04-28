@@ -16,7 +16,6 @@
   (html5 [:div.card
           [:div.card-image
            [:img {:src "/placeholders/avatar.jpg"}]]
-                  ; :style "max-width:200px;"}]]
           [:div.card-content
            [:span.card-title (:name profile)]]]))
 
