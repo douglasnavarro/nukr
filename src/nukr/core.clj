@@ -9,14 +9,15 @@
             [compojure.route :refer [not-found]])
 
   (:require [nukr.profile-model :as model-state]
-            [nukr.profile-logic :as model-logic]))
+            [nukr.profile-logic :as model-logic]
+            [nukr.profile-view :as profile-view]))
 
 (def app-state (model-state/create-profile-storage!))
 
 (defn home [req]
   {:status 200
-   :body "Welcome to Nukr!"
-   :headers {"content-type" "text/plain"}})
+   :body (profile-view/profiles-page @app-state)
+   :headers {}})
 
 (defn list-profiles [req]
   (let [profiles @app-state]
