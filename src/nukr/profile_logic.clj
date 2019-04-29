@@ -3,10 +3,12 @@
    `name` field is used as unique identifier for model.")
 
 (defn create
-  [name]
-  (assert (string? name)
-          "name must be string!")
-  {:name name :connections #{} :hidden false})
+  ([name]
+   (create name false))
+  ([name hidden-choice]
+   (assert (string? name)
+           "name must be string!")
+   {:name name :connections #{} :hidden hidden-choice}))
 
 (defn get-name [profile] (:name profile))
 

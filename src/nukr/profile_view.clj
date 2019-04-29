@@ -16,11 +16,12 @@
 (defn- create-card [profile]
   (html5 [:div.card
           [:div.card-image
-           [:img {:src "/placeholders/avatar.jpg"}]]
+           [:img {:src "/placeholders/avatar.jpg"}
+            (if (profile-logic/hidden? profile)
+              [:span.card-title
+               [:i.material-icons.small "visibility_off"]])]]
           [:div.card-content
-           [:span.card-title (profile-logic/get-name profile)]
-           (if (profile-logic/hidden? profile)
-             [:i.material-icons "notifications_off"])]]))
+           [:span.card-title (profile-logic/get-name profile)]]]))
 
 (defn- update-profile-form [name])
 
@@ -31,6 +32,8 @@
           [:meta {:name :viewport
                   :content "width=device-width, initial-scale=1.0"}]
           [:link {:href "/materialize/css/materialize.min.css"
+                  :rel :stylesheet}]
+          [:link {:href "style.css"
                   :rel :stylesheet}]
           [:link {:href "https://fonts.googleapis.com/icon?family=Material+Icons"
                   :rel :stylesheet}]]

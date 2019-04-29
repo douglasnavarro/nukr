@@ -10,8 +10,8 @@
   (first (filter #(= name (get-name %)) @profile-storage)))
 
 (defn add-profile!
-  [name profile-storage]
-  (let [profile (create name)]
+  [name hidden-choice profile-storage]
+  (let [profile (create name hidden-choice)]
     (dosync
       (alter profile-storage conj profile))))
 

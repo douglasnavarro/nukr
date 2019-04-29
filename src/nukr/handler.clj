@@ -17,7 +17,8 @@
 (defn handle-create-profile [req]
   (let [app-state (:app-state req)
         name      (get-in req [:params "name"])
-        item      (model-state/add-profile! name app-state)])
+        hidden    (and (get-in req [:params "hidden"]) true)
+        item      (model-state/add-profile! name hidden app-state)])
   {:status 302
    :headers {"Location" "/profiles"}
    :body ""})
