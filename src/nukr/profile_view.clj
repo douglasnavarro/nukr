@@ -1,6 +1,7 @@
 (ns nukr.profile-view
   "Views. Provides dynamic declarative html generation for handlers."
-  (require [hiccup.page :refer [html5]]))
+  (require [hiccup.page :refer [html5]]
+           [nukr.profile-logic :as profile-logic]))
 
 (defn- create-profile-form []
   (html5 [:form {:method "POST" :action "/profiles"}
@@ -12,13 +13,16 @@
             [:span "I don't want suggestions"]]]
           [:button {:type "submit" :class "btn purple"} "Join"]]))
 
-(defn create-card [profile]
+(defn- create-card [profile]
   (html5 [:div.card
           [:div.card-image
            [:img {:src "/placeholders/avatar.jpg"}]]
           [:div.card-content
-           [:span.card-title (:name profile)]]]))
+           [:span.card-title (profile-logic/get-name profile)]
+           (if (profile-logic/hidden? profile)
+             [:i.material-icons "notifications_off"])]]))
 
+(defn- update-profile-form [name])
 
 (defn profiles-page [profiles]
   (html5 {:lang :en}
@@ -27,6 +31,8 @@
           [:meta {:name :viewport
                   :content "width=device-width, initial-scale=1.0"}]
           [:link {:href "/materialize/css/materialize.min.css"
+                  :rel :stylesheet}]
+          [:link {:href "https://fonts.googleapis.com/icon?family=Material+Icons"
                   :rel :stylesheet}]]
          [:body
           [:div.container

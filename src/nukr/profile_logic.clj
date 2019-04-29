@@ -1,5 +1,6 @@
 (ns nukr.profile-logic
-  "Pure functions for dealing with model/profiles logic")
+  "Pure functions for dealing with model/profiles logic.
+   `name` field is used as unique identifier for model.")
 
 (defn create
   [name]
@@ -26,3 +27,5 @@
   [profile1 profile2]
   [(add-connection profile1 (get-name profile2))
    (add-connection profile2 (get-name profile1))])
+
+(defn toggle-hidden [profile] (update profile :hidden not))
