@@ -15,7 +15,7 @@
 
 (defn- connect-profiles-form [profiles]
   (html5 (if (<= 2 (count profiles))
-          [:label "Select profile to connect"
+          [:label "Select profiles to connect"
            [:select {:name "profile1" :form "connect-form"}
             (for [profile profiles]
               [:option {:value (profile-logic/get-name profile)}
@@ -27,23 +27,6 @@
            [:form {:method "POST" :action "/request" :id "connect-form"}
             [:button {:type "submit" :class "btn purple"} "Connect"]]]
           [:p "Create more than one profile so you can connect them!"])))
-
-  ; (html5 [:form {:method "POST" :action "/request"}
-  ;         [:div {:class "input-field col s6"}
-  ;          [:select
-  ;           (for [profile profiles]
-  ;             [:option
-  ;              {:value (profile-logic/get-name profile)}
-  ;              (profile-logic/get-name profile)])]
-  ;          [:label "First profile"]]
-  ;         [:div {:class "input-field col s6"}
-  ;          [:select
-  ;           (for [profile profiles]
-  ;             [:option
-  ;              {:value (profile-logic/get-name profile)}
-  ;              (profile-logic/get-name profile)])]
-  ;          [:label "Second profile"]]
-  ;         [:button {:type "submit" :class "btn purple"} "Connect"]]))
 
 (defn- create-card [profile]
   (html5 [:div.card
