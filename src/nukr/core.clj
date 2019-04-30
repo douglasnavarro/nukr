@@ -33,7 +33,8 @@
   (GET  "/" [] handle-redirect-profiles)
   (GET  "/profiles" [] handle-list-profiles)
   (POST "/profiles" [] handle-create-profile)
-  (PUT "/profiles/:name" [] handle-create-profile)
+  (PUT "/profiles/:name" [] handle-update-profile)
+  (GET "/profiles/:name/suggestions" [] handle-dump)
   (not-found "Page not found."))
 
 (def app

@@ -23,4 +23,4 @@
    :headers {"Location" "/profiles"}
    :body ""})
 
-(defn handle-update-item [req])
+(defn handle-update-profile [req])
