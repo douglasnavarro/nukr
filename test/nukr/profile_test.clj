@@ -7,7 +7,12 @@
           :connections #{}
           :hidden false}
          (profile/create "Edward"))
-      "create-profile returns expected map"))
+      "create-profile 1-arity returns expected map")
+  (is (= {:name "Edward"
+          :connections #{}
+          :hidden true}
+         (profile/create "Edward" true))
+      "create-profile 2-arity returns expected map"))
 
 (deftest create-profile-validates-input-test
   (is (thrown? AssertionError

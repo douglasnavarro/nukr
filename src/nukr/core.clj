@@ -8,7 +8,7 @@
             [compojure.core :refer [defroutes GET POST PUT ANY]]
             [compojure.route :refer [not-found]])
 
-  (:require [nukr.profile-model :as model-state]
+  (:require [nukr.profile-state :as model-state]
             [nukr.handler :refer :all]))
 
 (def app-state (model-state/create-profile-storage!))
@@ -33,7 +33,7 @@
   (GET  "/" [] handle-redirect-profiles)
   (GET  "/profiles" [] handle-list-profiles)
   (POST "/profiles" [] handle-create-profile)
-  (PUT "/profiles/:name" [] handle-update-profile)
+  (PUT "/profiles/:name" [] handle-connect-profiles)
   (GET "/profiles/:name/suggestions" [] handle-dump)
   (not-found "Page not found."))
 

@@ -7,7 +7,8 @@
                  [ring "1.6.3"]
                  [ring/ring-mock "0.3.2"]
                  [compojure "1.6.1" :exclusions [ring/ring-codec]]
-                 [hiccup "1.0.5"]]
+                 [hiccup "1.0.5"]
+                 [org.clojure/tools.logging "0.4.1"]]
 
   :main nukr.core
   :profiles {:dev

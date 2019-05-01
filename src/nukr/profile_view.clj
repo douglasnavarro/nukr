@@ -1,7 +1,7 @@
 (ns nukr.profile-view
   "Views. Provides dynamic declarative html generation for handlers."
   (require [hiccup.page :refer [html5]]
-           [nukr.profile-logic :as profile-logic]))
+           [nukr.profile-logic :refer :all]))
 
 (defn- create-profile-form []
   (html5 [:form {:method "POST" :action "/profiles"}
@@ -13,38 +13,39 @@
             [:span "I don't want suggestions"]]]
           [:button {:type "submit" :class "btn purple"} "Join"]]))
 
-(defn- connect-profiles-form [profiles]
-  (html5 (if (<= 2 (count profiles))
-          [:label "Select profiles to connect"
-           [:select {:name "profile1" :form "connect-form"}
-            (for [profile profiles]
-              [:option {:value (profile-logic/get-name profile)}
-                       (profile-logic/get-name profile)])]
-           [:select {:name "profile2" :form "connect-form"}
-            (for [profile profiles]
-              [:option {:value (profile-logic/get-name profile)}
-                       (profile-logic/get-name profile)])]
-           [:form {:method "POST" :action "/request" :id "connect-form"}
-            [:button {:type "submit" :class "btn purple"} "Connect"]]]
-          [:p "Create more than one profile so you can connect them!"])))
-
-(defn- create-card [profile]
-  (html5 [:div.card
-          [:div.card-image
-           [:img {:src "/placeholders/avatar.jpg"}
-            (if (profile-logic/hidden? profile)
-              [:span.card-title
-               [:i.material-icons.tiny "visibility_off"]])]]
-          [:div.card-content
-           [:span.card-title (profile-logic/get-name profile)]]]))
-
-(defn- update-profile-form [name])
+(defn- create-card [profile profiles]
+  (let [name (get-name profile)]
+    (html5 [:div.card
+            [:div.card-image
+             [:img {:src "/placeholders/avatar.jpg"}
+              (if (hidden? profile)
+                [:span.card-title
+                 [:i.material-icons.tiny "visibility_off"]])]]
+            [:div.card-content
+             [:div.row.center-align
+              [:span.card-title name]]
+             [:div.row.center-align
+              [:a.dropdown-trigger.btn-small
+               {:href "#"
+                :data-target (str "dropdown-" name)}
+               "Connect"]
+              [:ul.dropdown-content {:id (str "dropdown-" name)}
+               (for [other-profile profiles]
+                 (if (not (= profile other-profile))
+                   [:li
+                    [:a {:id "dropdown-option"
+                         :onclick (format "makePutRequest(\"%s\", \"%s\")"
+                                          name
+                                          (get-name other-profile))}
+                        (get-name other-profile)]]))]]
+             [:div.row.center-align
+              [:p (get-connections profile)]]]])))
 
 (defn profiles-page [profiles]
   (html5 {:lang :en}
          [:head
           [:title "Nukr"]
-          [:meta {:name :viewport
+          [:meta {:name :viewport :charset "UTF-8"
                   :content "width=device-width, initial-scale=1.0"}]
           [:link {:href "/materialize/css/materialize.min.css"
                   :rel :stylesheet}]
@@ -54,6 +55,7 @@
                   :rel :stylesheet}]]
          [:body
           [:div.container
+           [:p profiles]
            [:div.row {:id "titles"}
              [:div {:class "col s12"}
               [:h1 "Nukr"]
@@ -62,15 +64,13 @@
            [:div.row {:id "profiles-list"}
             (if (seq profiles)
               (for [profile profiles]
-                [:div {:class "col l2 m4 s12"}
-                 (create-card profile)])
+                [:div {:class "col l3 m4 s12"}
+                 (create-card profile profiles)])
               [:div.col
                [:p "No profiles. Lead the way!"]])]
            [:div.row {:id "create-profile"}
             [:div {:class "col s4 push-s4 center-align"}
-             (create-profile-form)]]
-           [:div.row {:id "connect-profile"}
-            [:div {:class "col s4 push-s4 center-align"}
-             (connect-profiles-form profiles)]]]
+             (create-profile-form)]]]
           [:script {:src "/materialize/js/materialize.min.js"}]
+          [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"}]
           [:script {:src "script.js"}]]))
