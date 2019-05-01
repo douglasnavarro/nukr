@@ -30,8 +30,8 @@
         target-profile (get-profile target-name profile-storage)
         connected      (connect origin-profile target-profile)]
     (dosync
-      (remove-profile! origin-profile profile-storage)
-      (remove-profile! target-profile profile-storage)
+      (remove-profile! origin-name profile-storage)
+      (remove-profile! target-name profile-storage)
       (add-profile! (first connected) profile-storage)
       (add-profile! (second connected) profile-storage))))
 
