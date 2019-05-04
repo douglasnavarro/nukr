@@ -2,11 +2,11 @@
   (:require [clojure.test :refer :all]
             [nukr.profile-logic :refer :all]))
 
+(def ed-mock {:name "Ed" :connections #{} :hidden false})
+(def cris-mock {:name "Cris" :connections #{} :hidden false})
+
 (deftest create-profile-success-test
-  (is (= {:name "Edward"
-          :connections #{}
-          :hidden false}
-         (create "Edward"))
+  (is (= ed-mock (create "Ed"))
       "create-profile 1-arity returns expected map")
   (is (= {:name "Edward"
           :connections #{}
@@ -20,20 +20,19 @@
       "create-profile validates name field type"))
 
 (deftest profile-get-fields-test
-  (let [a-profile   (create "Edward")]
-    (is (= "Edward" (get-name a-profile)))
-    (is (= #{}      (get-connections a-profile)))
-    (is (= false    (hidden? a-profile)))))
+  (let [a-profile ed-mock]
+    (is (= "Ed"  (get-name a-profile)))
+    (is (= #{}   (get-connections a-profile)))
+    (is (= false (hidden? a-profile)))))
 
 (deftest add-connection-test
-  (let [a-profile   (create "Edward")
+  (let [a-profile   ed-mock
         new-profile (add-connection "Cris" a-profile)]
-    (is (= #{"Cris"}
-           (get-connections new-profile)))))
+    (is (= {:name "Ed" :connections #{"Cris"} :hidden false}))))
 
 (deftest connect-test
-  (let [profile1   (create "Cris")
-        profile2   (create "Ed")
+  (let [profile1   cris-mock
+        profile2   ed-mock
         new-1      {:name "Cris" :connections #{"Ed"}   :hidden false}
         new-2      {:name "Ed"   :connections #{"Cris"} :hidden false}]
     (is (= [new-1 new-2]
@@ -41,18 +40,16 @@
         "connect returns connected version of input profiles")))
 
 (deftest connected?-test
-  (let [cris  (->> "Cris" create (add-connection "David"))
-        david (->> "David" create  (add-connection "Cris"))
-        ed    (->> "Ed" create (add-connection "David"))]
+  (let [cris  {:name "Cris" :connections #{"David"} :hidden false}
+        david {:name "David" :connections #{"Cris" "Ed"} :hidden false}
+        ed    {:name "Ed" :connections #{"David"} :hidden false}]
     (is (connected? cris david))
+    (is (connected? ed david))
     (is (not (connected? cris ed)))))
 
 (deftest intersect-connections-test
-  (let [cris (->> "Cris" create
-                  (add-connection "David")
-                  (add-connection "X"))
-        ed (->> "Ed" create
-                (add-connection "David")
-                (add-connection "Y"))]
+  (let [cris {:name "Cris" :connections #{"David" "X"} :hidden false}
+        ed   {:name "Ed" :connections #{"David" "Z"} :hidden false}
+        z    {:name "Z" :connections #{"Ed"} :hidden false}]
    (is (= #{"David"} (intersect-connections cris ed)))
-   (is (= #{}        (intersect-connections cris (create "Z"))))))
+   (is (= #{}        (intersect-connections cris z)))))
