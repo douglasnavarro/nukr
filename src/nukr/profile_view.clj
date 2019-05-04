@@ -29,6 +29,25 @@
           [:p (clojure.string/join ", " connections)])
    (html5 [:label "No connections yet." [:br]])))
 
+(defn- render-connect-links
+  [profile profiles]
+  (html5
+    [:a.dropdown-trigger
+     {:href "#"
+      :data-target (str "dropdown-" (get-name profile))}
+     "CONNECT"]
+    [:ul.dropdown-content {:id (str "dropdown-" (get-name profile))}
+     (for [other-profile profiles]
+       (if (and
+             (not (= profile other-profile))
+             (not (connected? profile other-profile)))
+         [:li
+          [:a {:id "dropdown-option"
+               :onclick (format "makeConnectRequest(\"%s\", \"%s\")"
+                                (get-name profile)
+                                (get-name other-profile))}
+              (get-name other-profile)]]))]))
+
 (defn- render-card [profile profiles]
   (let [name (get-name profile)
         connections (seq (get-connections profile))]
@@ -43,19 +62,7 @@
              (render-connections profile)
              (render-suggestions profile profiles)]
             [:div.card-action.center-align
-             [:a.dropdown-trigger
-              {:href "#"
-               :data-target (str "dropdown-" name)}
-              "CONNECT"]
-             [:ul.dropdown-content {:id (str "dropdown-" name)}
-              (for [other-profile profiles]
-                (if (not (= profile other-profile))
-                  [:li
-                   [:a {:id "dropdown-option"
-                        :onclick (format "makeConnectRequest(\"%s\", \"%s\")"
-                                         name
-                                         (get-name other-profile))}
-                       (get-name other-profile)]]))]]])))
+             (render-connect-links profile profiles)]])))
 
 (defn- base-page [content]
   (html5 {:lang :en}
@@ -81,7 +88,9 @@
       [:div.row {:id "titles"}
         [:div {:class "col s12"}
          [:h1 "Nukr"]
-         [:h5 "The future is purple - and connected!"]
+         [:h5 "The future is "
+          [:span.purple {:style "color: white;padding: .4%"} "purple"]
+          " - and connected!"]
          [:hr]]]
       [:div.row {:id "profiles-list"}
        (if (seq profiles)
