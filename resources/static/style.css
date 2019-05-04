@@ -1,8 +1,12 @@
 .card .card-image .card-title {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 300;
   padding-left: 5%;
   padding-bottom: 1%;
+}
+
+.card .card-image {
+ max-height: 100px;
 }
 
 .card-content .row {

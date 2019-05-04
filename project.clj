@@ -8,7 +8,12 @@
                  [ring/ring-mock "0.3.2"]
                  [compojure "1.6.1" :exclusions [ring/ring-codec]]
                  [hiccup "1.0.5"]
-                 [org.clojure/tools.logging "0.4.1"]]
+                 [org.clojure/tools.logging "0.4.1"]
+                 [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
+                                                    javax.jms/jms
+                                                    com.sun.jmdk/jmxtools
+                                                    com.sun.jmx/jmxri]]]
+
 
   :main nukr.core
   :profiles {:dev

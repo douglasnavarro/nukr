@@ -18,33 +18,22 @@
   (fn [req]
     (handler (assoc req :app-state app-state))))
 
-(def sim-methods {"PUT" :put
-                  "DELETE" :delete})
-
-(defn wrap-simulated-methods [handler]
-  (fn [req]
-    (if-let [method (and (= :post (:request-method req))
-                         (sim-methods (get-in req [:params "_method"])))]
-      (handler (assoc req :request-method method))
-      (handler req))))
-
 (defroutes routes
   (ANY "/request" [] handle-dump)
   (GET  "/" [] handle-redirect-profiles)
   (GET  "/profiles" [] handle-list-profiles)
   (POST "/profiles" [] handle-create-profile)
-  (PUT "/profiles/:name" [] handle-connect-profiles)
+  (PUT "/profiles/:name/connections" [] handle-connect-profiles)
   (GET "/profiles/:name/suggestions" [] handle-dump)
   (not-found "Page not found."))
 
 (def app
-  (wrap-simulated-methods
-    (wrap-state
-      (wrap-file-info
-         (wrap-resource
-           (wrap-params
-             routes)
-           "static")))))
+  (wrap-state
+    (wrap-file-info
+       (wrap-resource
+         (wrap-params
+           routes)
+         "static"))))
 
 (defn -main [port]
   (jetty/run-jetty

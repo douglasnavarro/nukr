@@ -4,15 +4,18 @@ document.addEventListener('DOMContentLoaded', function() {
   var instances = M.Dropdown.init(elems, options);
 });
 
-function makePutRequest(orig_name, target_name) {
+function makeConnectRequest(orig_name, target_name) {
   $.ajax({
     type: "PUT",
-    url: "/profiles/" + orig_name,
-    // data: "name=name&location=location",
-    success: function(msg){
-      // console.log(this.url);
-      console.log(msg);
+    url: "/profiles/" + orig_name + "/connections",
+    data: "target=" + target_name,
+    success: function(data, textStatus, request) {
+     var redirect_url = request.getResponseHeader('Location')
+     if (redirect_url) window.location.href = redirect_url;
+    },
+    error: function(data, textStatus, request) {
+     M.toast({html: "Unable to connect these profiles."});
     }
   });
 }
-$(document).ready(makePutRequest);
+// $(document).ready(makeConnectRequest);

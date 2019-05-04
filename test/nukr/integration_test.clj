@@ -14,7 +14,14 @@
            (:status (app (mock/request :post "/"))))
         " returns 404 on POST")))
 
-(deftest profiles-endpoint-test
-  (let [response (app (mock/request :get "/profiles"))]
-    (is (= 200 (:status response)))
-    (is (includes? (:body response) "Cris"))))
+; (deftest handle-connect-profiles-test
+;   (testing "/profile/:name/connections endpoint"
+;     (is (= {:status 200
+;             :body "Connected!"
+;             :headers {}}
+;            (app (mock/request :put "profile/Cris/connections"))))))
+
+; (deftest profiles-endpoint-test
+;   (let [response (app (mock/request :get "/profiles"))]
+;     (is (= 200 (:status response)))
+;     (is (str/includes? (:body response) "Cris"))))
