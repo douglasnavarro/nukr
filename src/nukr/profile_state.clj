@@ -57,9 +57,14 @@
   (log/info "Connecting" origin-name "and" target-name)
   (let [origin-profile (get-profile origin-name profile-storage)
         target-profile (get-profile target-name profile-storage)
+        already?       (connected? origin-profile target-profile)
         connected      (connect origin-profile target-profile)]
-    (dosync
-      (remove-profile! origin-name profile-storage)
-      (remove-profile! target-name profile-storage)
-      (add-profile! (first connected) profile-storage)
-      (add-profile! (second connected) profile-storage))))
+    (cond
+      (nil? origin-profile) (throw (Exception. "profile does not exist"))
+      (nil? target-profile) (throw (Exception. "profile does not exist"))
+      already? false
+      :else (dosync
+              (remove-profile! origin-name profile-storage)
+              (remove-profile! target-name profile-storage)
+              (add-profile! (first connected) profile-storage)
+              (add-profile! (second connected) profile-storage)))))

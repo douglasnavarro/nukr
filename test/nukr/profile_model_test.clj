@@ -13,7 +13,9 @@
           @storage))
    (is (= #{{:name "Cris" :connections #{} :hidden false}
             {:name "Ed" :connections #{} :hidden false}}
-         (do (state/add-profile! ed-mock storage))))))
+         (do (state/add-profile! ed-mock storage))))
+   (is (= false (state/add-profile! ed-mock storage))
+       "return false if profile already present")))
 
 (deftest remove-profile-test
   (let [storage (ref #{cris-mock ed-mock})]
@@ -26,7 +28,12 @@
   (let [storage (ref #{cris-mock ed-mock})]
    (is (= #{{:name "Cris" :connections #{"Ed"} :hidden false}
             {:name "Ed" :connections #{"Cris"} :hidden false}}
-          (do (state/connect-profiles! "Cris" "Ed" storage))))))
+           (state/connect-profiles! "Cris" "Ed" storage)))
+   (is (thrown? Exception
+               (state/connect-profiles! "Cris" "David" storage))
+       "connect-profiles! throws if profile does not even exist")
+   (is (false? (state/connect-profiles! "Cris" "Ed" storage))
+       "connect-profiles! returns false if already connected")))
 
 (deftest get-suggestions-test
   (let [cris  {:name "Cris" :connections #{"David"} :hidden false}

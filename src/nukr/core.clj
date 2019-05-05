@@ -4,7 +4,6 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file-info :refer [wrap-file-info]]
-            [ring.handler.dump :refer [handle-dump]]
             [compojure.core :refer [defroutes GET POST PUT ANY]]
             [compojure.route :refer [not-found]])
 
@@ -19,12 +18,10 @@
     (handler (assoc req :app-state app-state))))
 
 (defroutes routes
-  (ANY "/request" [] handle-dump)
   (GET  "/" [] handle-redirect-profiles)
   (GET  "/profiles" [] handle-list-profiles)
   (POST "/profiles" [] handle-create-profile)
   (PUT "/profiles/:name/connections" [] handle-connect-profiles)
-  (GET "/profiles/:name/suggestions" [] handle-dump)
   (not-found "Page not found."))
 
 (def app

@@ -94,7 +94,7 @@
          [:hr]]]
       [:div.row {:id "profiles-list"}
        (if (seq profiles)
-         (for [profile profiles]
+         (for [profile (sort-by :name profiles)]
            [:div {:class "col l2 m4 s12"}
             (render-card profile profiles)])
          [:div.col
