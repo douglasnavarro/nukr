@@ -26,18 +26,18 @@
 
 (def app
   (wrap-state
-    (wrap-file-info
-       (wrap-resource
-         (wrap-params
-           routes)
-         "static"))))
+   (wrap-file-info
+    (wrap-resource
+     (wrap-params
+      routes)
+     "static"))))
 
 (defn -main [port]
   (jetty/run-jetty
-    app
-    {:port (Integer. port)}))
+   app
+   {:port (Integer. port)}))
 
 (defn -dev-main [port]
   (jetty/run-jetty
-    (wrap-reload #'app)
-    {:port (Integer. port)}))
+   (wrap-reload #'app)
+   {:port (Integer. port)}))

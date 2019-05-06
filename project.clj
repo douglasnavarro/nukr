@@ -13,11 +13,10 @@
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
-
-
   :main nukr.core
   :profiles {:dev
              {:main nukr.core/-dev-main}}
-  :plugins [[lein-eftest "0.5.7"]]
+  :plugins [[lein-eftest "0.5.7"]
+            [lein-cljfmt "0.6.4"]]
   :repl-options {:init-ns nukr.profile-logic}
   :eftest {:multithread? false})

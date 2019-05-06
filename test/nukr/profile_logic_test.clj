@@ -51,5 +51,5 @@
   (let [cris {:name "Cris" :connections #{"David" "X"} :hidden false}
         ed   {:name "Ed" :connections #{"David" "Z"} :hidden false}
         z    {:name "Z" :connections #{"Ed"} :hidden false}]
-   (is (= #{"David"} (intersect-connections cris ed)))
-   (is (= #{}        (intersect-connections cris z)))))
+    (is (= #{"David"} (intersect-connections cris ed)))
+    (is (= #{}        (intersect-connections cris z)))))

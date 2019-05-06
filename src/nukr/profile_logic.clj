@@ -18,13 +18,13 @@
 (defn hidden? [profile] (:hidden profile))
 
 (defn connected?
- [profile1 profile2]
- (let [connections1 (get-connections profile1)
-       connections2 (get-connections profile2)
-       name1 (get-name profile1)
-       name2 (get-name profile2)]
-   (and (contains? connections2 name1)
-        (contains? connections1 name2))))
+  [profile1 profile2]
+  (let [connections1 (get-connections profile1)
+        connections2 (get-connections profile2)
+        name1 (get-name profile1)
+        name2 (get-name profile2)]
+    (and (contains? connections2 name1)
+         (contains? connections1 name2))))
 
 (defn add-connection
   "Return new `profile` with `name` added to its connections"
@@ -43,7 +43,7 @@
 (defn toggle-hidden [profile] (update profile :hidden not))
 
 (defn intersect-connections
- [profile1 profile2]
- (set/intersection
-  (get-connections profile1)
-  (get-connections profile2)))
+  [profile1 profile2]
+  (set/intersection
+   (get-connections profile1)
+   (get-connections profile2)))

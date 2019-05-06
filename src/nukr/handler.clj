@@ -39,13 +39,13 @@
         target-name    (get-in req [:params "target"])
         origin-profile (state/get-profile origin-name app-state)
         target-profile (state/get-profile target-name app-state)]
-   (cond
-     (nil? origin-profile) (profile-not-found-response origin-name)
-     (nil? target-profile) (profile-not-found-response target-name)
-     (state/connect-profiles! origin-name target-name app-state)
-     {:status 200
-      :headers {"Location" "/profiles" "Content-type" "text/plain"}
-      :body "Profiles successfully connected."}
-     :else {:status 409
-            :headers {"Content-type" "text/plain"}
-            :body "Profiles already connected."})))
+    (cond
+      (nil? origin-profile) (profile-not-found-response origin-name)
+      (nil? target-profile) (profile-not-found-response target-name)
+      (state/connect-profiles! origin-name target-name app-state)
+      {:status 200
+       :headers {"Location" "/profiles" "Content-type" "text/plain"}
+       :body "Profiles successfully connected."}
+      :else {:status 409
+             :headers {"Content-type" "text/plain"}
+             :body "Profiles already connected."})))

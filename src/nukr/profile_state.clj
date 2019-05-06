@@ -37,7 +37,7 @@
     (do (log/info profile "already stored. Ignoring.")
         false)
     (dosync
-      (alter profile-storage conj profile))))
+     (alter profile-storage conj profile))))
 
 (defn remove-profile!
   "Remove `profile` from `profile-storage`
@@ -47,7 +47,7 @@
   (let [profile (get-profile name profile-storage)]
     (if profile
       (dosync
-        (alter profile-storage disj profile))
+       (alter profile-storage disj profile))
       false)))
 
 (defn connect-profiles!
@@ -64,7 +64,7 @@
       (nil? target-profile) (throw (Exception. "profile does not exist"))
       already? false
       :else (dosync
-              (remove-profile! origin-name profile-storage)
-              (remove-profile! target-name profile-storage)
-              (add-profile! (first connected) profile-storage)
-              (add-profile! (second connected) profile-storage)))))
+             (remove-profile! origin-name profile-storage)
+             (remove-profile! target-name profile-storage)
+             (add-profile! (first connected) profile-storage)
+             (add-profile! (second connected) profile-storage)))))

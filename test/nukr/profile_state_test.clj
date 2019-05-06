@@ -9,31 +9,31 @@
 (deftest add-profile-test
   (let [storage (ref #{})
         _ (state/add-profile! cris-mock storage)]
-   (is (= #{{:name "Cris" :connections #{} :hidden false}}
-          @storage))
-   (is (= #{{:name "Cris" :connections #{} :hidden false}
-            {:name "Ed" :connections #{} :hidden false}}
-         (do (state/add-profile! ed-mock storage))))
-   (is (= false (state/add-profile! ed-mock storage))
-       "return false if profile already present")))
+    (is (= #{{:name "Cris" :connections #{} :hidden false}}
+           @storage))
+    (is (= #{{:name "Cris" :connections #{} :hidden false}
+             {:name "Ed" :connections #{} :hidden false}}
+           (do (state/add-profile! ed-mock storage))))
+    (is (= false (state/add-profile! ed-mock storage))
+        "return false if profile already present")))
 
 (deftest remove-profile-test
   (let [storage (ref #{cris-mock ed-mock})]
-   (is (= #{{:name "Cris" :connections #{} :hidden false}}
-          (do (state/remove-profile! "Ed" storage))))
-   (is (= #{}
-          (do (state/remove-profile! "Cris" storage))))))
+    (is (= #{{:name "Cris" :connections #{} :hidden false}}
+           (do (state/remove-profile! "Ed" storage))))
+    (is (= #{}
+           (do (state/remove-profile! "Cris" storage))))))
 
 (deftest connect-profiles-test
   (let [storage (ref #{cris-mock ed-mock})]
-   (is (= #{{:name "Cris" :connections #{"Ed"} :hidden false}
-            {:name "Ed" :connections #{"Cris"} :hidden false}}
+    (is (= #{{:name "Cris" :connections #{"Ed"} :hidden false}
+             {:name "Ed" :connections #{"Cris"} :hidden false}}
            (state/connect-profiles! "Cris" "Ed" storage)))
-   (is (thrown? Exception
-               (state/connect-profiles! "Cris" "David" storage))
-       "connect-profiles! throws if profile does not even exist")
-   (is (false? (state/connect-profiles! "Cris" "Ed" storage))
-       "connect-profiles! returns false if already connected")))
+    (is (thrown? Exception
+                 (state/connect-profiles! "Cris" "David" storage))
+        "connect-profiles! throws if profile does not even exist")
+    (is (false? (state/connect-profiles! "Cris" "Ed" storage))
+        "connect-profiles! returns false if already connected")))
 
 (deftest get-suggestions-test
   (let [cris  {:name "Cris" :connections #{"David"} :hidden false}
