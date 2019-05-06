@@ -42,14 +42,14 @@ Create new profile.
 The following fields are expected:
 
 - name (mandatory)
-  - `string`.
-  - Name of the person represented by the profile.
+    - `string`.
+    - Name of the person represented by the profile.
 
 
 - hidden (optional)
- - `boolean`.
- - If set, profile is not shown in suggestions for other profiles.
- - default: `false`.
+   - `boolean`.
+   - If set, profile is not shown in suggestions for other profiles.
+   - default: `false`.
 
 Example:
 
