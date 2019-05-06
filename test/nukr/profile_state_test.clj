@@ -1,4 +1,4 @@
-(ns nukr.profile-model-test
+(ns nukr.profile-state-test
   (:require [clojure.test :refer :all]
             [nukr.profile-logic :as logic]
             [nukr.profile-state :as state]))

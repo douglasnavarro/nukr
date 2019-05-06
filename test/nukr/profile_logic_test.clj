@@ -1,4 +1,4 @@
-(ns nukr.profile-test
+(ns nukr.profile-logic-test
   (:require [clojure.test :refer :all]
             [nukr.profile-logic :refer :all]))
 
