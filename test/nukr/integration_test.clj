@@ -1,27 +1,104 @@
 (ns nukr.integration-test
   (:require [clojure.test :refer :all]
             [nukr.core :refer :all]
-            [ring.mock.request :as mock]))
+            [ring.mock.request :as mock]
+            [clojure.string :refer [includes?]]))
 
-(deftest home-handler-test
-  (testing "home endpoint"
-    (is (= {:status  200
-            :body    "Welcome to Nukr!"
-            :headers {"content-type" "text/plain"}}
-           (app (mock/request :get "/")))
-        " returns 200 and greeting message on GET")
-    (is (= 404
-           (:status (app (mock/request :post "/"))))
-        " returns 404 on POST")))
+(def ed-mock {:name "Ed" :connections #{} :hidden false})
+(def cris-mock {:name "Cris" :connections #{} :hidden false})
+(def connected-1 {:name "Ed" :connections #{"Cris"} :hidden false})
+(def connected-2 {:name "Cris" :connections #{"Ed"} :hidden false})
 
-; (deftest handle-connect-profiles-test
-;   (testing "/profile/:name/connections endpoint"
-;     (is (= {:status 200
-;             :body "Connected!"
-;             :headers {}}
-;            (app (mock/request :put "profile/Cris/connections"))))))
+(deftest root-endpoint-redirects-test
+  (with-redefs [app-state (ref #{})]
+    (let [response (app (mock/request :get "/"))]
+      (testing "GET / redirects"
+        (is (= 301 (:status response)))))))
 
-; (deftest profiles-endpoint-test
-;   (let [response (app (mock/request :get "/profiles"))]
-;     (is (= 200 (:status response)))
-;     (is (str/includes? (:body response) "Cris"))))
+(deftest profiles-endpoint-GET-no-profiles-test
+  (testing "GET /profiles with no profiles"
+    (with-redefs [app-state (ref #{})]
+      (let [response (app (mock/request :get "/profiles"))]
+        (is (= 200 (:status response)))
+        (is (includes? (:body response) "No profiles"))))))
+
+(deftest profiles-endpoint-GET-unconnected-profile-test
+  (testing "GET /profiles with one unconnected profile"
+    (with-redefs [app-state (ref #{ed-mock})]
+      (let [response (app (mock/request :get "/profiles"))]
+        (is (= 200 (:status response)))
+        (is (includes? (:body response)
+                       "<span class=\"card-title\">Ed</span>"))
+        (is (includes? (:body response)
+                       "No connections"))
+        (is (includes? (:body response)
+                       "No suggestions"))))))
+
+(deftest profiles-endpoint-GET-connected-profiles-test
+  (testing "GET /profiles with connected profiles"
+    (with-redefs [app-state (ref #{connected-1 connected-2})]
+      (let [response (app (mock/request :get "/profiles"))]
+        (is (= 200 (:status response)))
+        (is (includes? (:body response)
+                       "<span class=\"card-title\">Ed</span>"))
+        (is (includes? (:body response)
+                       "<p class=\"connection\">Cris</p>"))
+        (is (includes? (:body response)
+                       "<span class=\"card-title\">Cris</span>"))
+        (is (includes? (:body response)
+                       "<p class=\"connection\">Ed</p>"))
+        (is (includes? (:body response) "No suggestions"))))))
+
+(deftest profiles-endpoint-GET-shows-suggestions
+  (testing "GET /profiles with connected profiles"
+    (with-redefs [app-state (ref #{ed-mock cris-mock})]
+      (let [response (app (mock/request :get "/profiles"))]
+        (is (= 200 (:status response)))
+        (is (includes? (:body response)
+                       "<p class=\"suggestion\">Cris: 0"))
+        (is (includes? (:body response)
+                       "<p class=\"suggestion\">Ed: 0"))))))
+
+(deftest profiles-endpoint-GET-shows-suggestions
+  (testing "GET /profiles with connected profiles"
+    (with-redefs [app-state (ref #{ed-mock cris-mock})]
+      (let [response (app (mock/request :get "/profiles"))]
+        (is (= 200 (:status response)))
+        (is (includes? (:body response)
+                       "<p class=\"suggestion\">Cris: 0"))
+        (is (includes? (:body response)
+                       "<p class=\"suggestion\">Ed: 0"))))))
+
+(deftest profiles-endpoint-POST-redirecs
+  (with-redefs [app-state (ref #{})]
+    (let [response (app (-> (mock/request :post "/profiles")
+                            (mock/query-string {:name "Cris"})))]
+      (is (= 302 (:status response)))
+      (is (= "/profiles" (->> "Location" (get (:headers response))))))))
+
+(deftest profiles-endpoint-POST-already-exists
+  (with-redefs [app-state (ref #{cris-mock})]
+    (let [response (app (-> (mock/request :post "/profiles")
+                            (mock/query-string {:name "Cris"})))]
+      (is (= 409 (:status response))))))
+
+(deftest profiles-endpoint-PUT-new-connection
+  (with-redefs [app-state (ref #{cris-mock ed-mock})]
+    (let [response (app (-> (mock/request :put "/profiles/Cris/connections")
+                            (mock/query-string {:target "Ed"})))]
+      (is (= 200 (:status response)))
+      (is (= "Profiles successfully connected." (:body response))))))
+
+(deftest profiles-endpoint-PUT-profile-not-found
+  (with-redefs [app-state (ref #{cris-mock ed-mock})]
+    (let [response (app (-> (mock/request :put "/profiles/David/connections")
+                            (mock/query-string {:target "Ed"})))]
+      (is (= 404 (:status response)))
+      (is (= "profile David not found." (:body response))))))
+
+(deftest profiles-endpoint-PUT-already-connected
+  (with-redefs [app-state (ref #{connected-1 connected-2})]
+    (let [response (app (-> (mock/request :put "/profiles/Ed/connections")
+                            (mock/query-string {:target "Cris"})))]
+      (is (= 409 (:status response)))
+      (is (= "Profiles already connected." (:body response))))))

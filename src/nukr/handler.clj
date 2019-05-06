@@ -44,6 +44,8 @@
      (nil? target-profile) (profile-not-found-response target-name)
      (state/connect-profiles! origin-name target-name app-state)
      {:status 200
-      :headers {"Location" "/profiles"}
+      :headers {"Location" "/profiles" "Content-type" "text/plain"}
       :body "Profiles successfully connected."}
-     :else {:status 409 :headers {} :body "Profiles already connected."})))
+     :else {:status 409
+            :headers {"Content-type" "text/plain"}
+            :body "Profiles already connected."})))

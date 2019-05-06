@@ -19,4 +19,5 @@
   :profiles {:dev
              {:main nukr.core/-dev-main}}
   :plugins [[lein-eftest "0.5.7"]]
-  :repl-options {:init-ns nukr.profile-logic})
+  :repl-options {:init-ns nukr.profile-logic}
+  :eftest {:multithread? false})
