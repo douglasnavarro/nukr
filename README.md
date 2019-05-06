@@ -3,50 +3,71 @@
 The future is purple - and connected!
 Join us through **nukr**!
 
-# features
+## running locally
+To run the application locally download dependencies and run using [leiningen](https://leiningen.org/):
+```
+$ lein deps
+$ lein run 3000
+```
 
-Nukr is a web application that provides a RESTful, resource-oriented API.
-Use the following endpoints to interact with nukr.
+then use your preferred browser to access **localhost:3000**. You may run with `port` 3000 or any other if necessary.
 
-### POST /profiles/create
+## run the tests
+`$ lein test` to run all tests with standard test runner
+
+`$ lein test nukr.profile-logic-test` to run pure functions unit tests
+
+`$ lein test nukr.profile-state-test` to run impure functions unit tests
+
+`$ lein test nukr.integration-test` to run integration tests
+
+The `eftest` plugin is already in `project.clj` so if you want prettier output during further development, run `lein eftest` instead.
+
+## style checker
+The [cljfmt](https://github.com/weavejester/cljfmt) is used to style check this project and is already included in the project plugins.
+
+Run `$ lein cljfmt fix` to check and apply fixes on all files or `$ lein cljfmt fix $FILE` to run only on file specified by `$FILE`.
+
+Setting your editor to run this on file save is recommended.
+
+
+# endpoints
+These are the current endpoints to interact with nukr, implemented with the minimum code possible to fulfill initial requirements.
+
+### GET /profiles
+Main application view. Returns HTML for list of profiles, their connections and suggestions, as well as forms/scripts for POST and PUT requests to other endpoints.
+
+### POST /profiles
 Create new profile.
-The following fields are expected in the payload:
+The following fields are expected:
 
-- id
-  - `integer`
-  - Unique identification number for the profile.
-
-- name
-  - `string`
+- name (mandatory)
+  - `string`.
   - Name of the person represented by the profile.
 
-Example:
-```
-{
- "id": 1
- "name": "Edward Wible"
-}
-```
 
-### POST /connections/create
-Create a new connection between 2 profiles.
-The following fields are expected in the payload:
-
-- orig_id
-  - `integer`
-  - Unique identification number for the first profile.
-- dest_id
-  - `integer`
-  - Unique identification number for the second profile.
+- hidden (optional)
+ - `boolean`.
+ - If set, profile is not shown in suggestions for other profiles.
+ - default: `false`.
 
 Example:
+
 ```
-{
- "orig_d": 1
- "dest_id": 2
-}
+curl POST --data "name=Cris" localhost:3000/profiles -v
+curl POST --data "name=Ed" localhost:3000/profiles -v
 ```
 
-## Usage
+### PUT profiles/:name/connections
+Create a new connection between 2 profiles, updating both profiles' `connections` field.
 
-FIXME
+The following fields are expected:
+
+- target
+  - `string`
+  - Profile to be connected with.
+
+Example:
+```
+curl -X PUT --data "target=Cris" localhost:3000/profiles/Ed/connections -v
+```
