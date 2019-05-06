@@ -32,7 +32,7 @@ Setting your editor to run this on file save is recommended.
 
 
 # endpoints
-These are the current endpoints to interact with nukr, implemented with the minimum code possible to fulfill initial requirements.
+These are the current endpoints to interact with Nukr, implemented with the minimum code necessary to fulfill initial requirements along with error handling, logging, reasonable test coverage and MVC-like structure.
 
 ### GET /profiles
 Main application view. Returns HTML for list of profiles, their connections and suggestions, as well as forms/scripts for POST and PUT requests to other endpoints.
