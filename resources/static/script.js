@@ -10,8 +10,7 @@ function makeConnectRequest(orig_name, target_name) {
     url: "/profiles/" + orig_name + "/connections",
     data: "target=" + target_name,
     success: function(data, textStatus, request) {
-     var redirect_url = request.getResponseHeader('Location');
-     if (redirect_url) window.location.href = redirect_url;
+     window.location.href = "/";
     },
     error: function(data, textStatus, request) {
      M.toast({html: data.responseText});

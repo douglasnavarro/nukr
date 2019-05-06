@@ -1,4 +1,5 @@
 (ns nukr.core
+  (:gen-class)
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.params :refer [wrap-params]]
@@ -18,9 +19,10 @@
     (handler (assoc req :app-state app-state))))
 
 (defroutes routes
-  (GET  "/" [] handle-redirect-profiles)
+  (GET  "/" [] handle-html-view)
   (GET  "/profiles" [] handle-list-profiles)
   (POST "/profiles" [] handle-create-profile)
+  (GET "/profiles/:name" [] handle-get-profile)
   (PUT "/profiles/:name/connections" [] handle-connect-profiles)
   (not-found "Page not found."))
 

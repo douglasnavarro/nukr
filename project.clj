@@ -7,6 +7,7 @@
                  [ring "1.6.3"]
                  [ring/ring-mock "0.3.2"]
                  [compojure "1.6.1" :exclusions [ring/ring-codec]]
+                 [org.clojure/data.json "0.2.6"]
                  [hiccup "1.0.5"]
                  [org.clojure/tools.logging "0.4.1"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
