@@ -5,15 +5,22 @@
            [nukr.profile-logic :refer :all]
            [nukr.profile-state :refer :all]))
 
+(def make-create-request
+  "makeCreateRequest(this.name.value, this.hidden.checked); return false;")
+
 (defn- render-profile-form []
-  (html [:form {:method "POST" :action "/profiles"}
+  (html [:form {:method "POST" :action ""
+                :onsubmit make-create-request}
          [:input {:type "text" :name "name"
                   :placeholder "How should we call you? :)"}]
          [:p
           [:label
            [:input.filled-in {:type "checkbox" :name "hidden"}]
            [:span "I don't want to appear in suggestions"]]]
-         [:button {:type "submit" :class "btn purple"} "Join"]]))
+         [:button {:type "button"
+                   :class "btn purple"
+                   :onclick "this.form.onsubmit();"}
+          "Join"]]))
 
 (defn- render-suggestion [sugg]
   [:p {:class "suggestion"}

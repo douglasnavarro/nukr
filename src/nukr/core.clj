@@ -23,7 +23,9 @@
   (GET  "/profiles" [] handle-list-profiles)
   (POST "/profiles" [] handle-create-profile)
   (GET "/profiles/:name" [] handle-get-profile)
+  (GET "/profiles/:name/connections" [] handle-get-connections)
   (PUT "/profiles/:name/connections" [] handle-connect-profiles)
+  (GET "/profiles/:name/suggestions" [] handle-get-suggestions)
   (not-found "Page not found."))
 
 (def app

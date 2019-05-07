@@ -4,6 +4,23 @@ document.addEventListener('DOMContentLoaded', function() {
   var instances = M.Dropdown.init(elems, options);
 });
 
+function makeCreateRequest(name, hidden) {
+ console.log(name);
+ console.log(hidden);
+ let data = "name=" + name + "&hidden=" + hidden;
+  $.ajax({
+    type: "POST",
+    url: "/profiles",
+    data: data,
+    success: function(data, textStatus, request) {
+     window.location.href = "/";
+    },
+    error: function(data, textStatus, request) {
+     M.toast({html: data.responseText});
+    }
+  });
+}
+
 function makeConnectRequest(orig_name, target_name) {
   $.ajax({
     type: "PUT",
@@ -17,4 +34,5 @@ function makeConnectRequest(orig_name, target_name) {
     }
   });
 }
+
 // $(document).ready(makeConnectRequest);
